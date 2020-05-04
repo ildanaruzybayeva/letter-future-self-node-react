@@ -1,24 +1,40 @@
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
+const { google } = require("googleapis");
+const OAuth2 = google.auth.OAuth2;
+require('dotenv').config();
 
-let transporter = nodemailer.createTransport({
-    service: 'gmail',
+const oauth2Client = new OAuth2(
+    process.env.clientId, // ClientID
+    process.env.clientSecret, // Client Secret
+    "https://developers.google.com/oauthplayground" // Redirect URL
+);
+
+oauth2Client.setCredentials({
+    refresh_token: process.env.refreshToken,
+});
+const accessToken = oauth2Client.getAccessToken()
+
+const smtpTransport = nodemailer.createTransport({
+    service: "gmail",
     auth: {
-        user: process.env.EMAIL || 'abc@gmail.com',
-        pass: process.env.PASSWORD || '1234',
-    },
+        type: "OAuth2",
+        user: "ildana.ruzybayeva@gmail.com",
+        clientId: process.env.clientId,
+        clientSecret: process.env.clientSecret,
+        refreshToken: process.env.refreshToken,
+        accessToken: accessToken
+    }
 });
 
-console.log('start');
-let mailOptions = {
-    from: 'ildana.ruzybayeva@gmail.com',
-    to: 'ildvnv@gmail.com',
-    subject: 'Nodemailer - Test',
-    text: 'Wooohooo it works!!',
+const mailOptions = {
+    from: "ildana.ruzybayeva@gmail.com",
+    to: "ildvnv@gmail.com",
+    subject: "Node.js Email with Secure OAuth",
+    generateTextFromHTML: true,
+    html: "<b>test</b>"
 };
-console.log('here');
 
-transporter.sendMail(mailOptions, function(err, info) {
-    if (err) console.log(err);
-    else console.log(info);
+smtpTransport.sendMail(mailOptions, (error, response) => {
+    error ? console.log(error) : console.log(response);
+    smtpTransport.close();
 });
-console.log('end');
