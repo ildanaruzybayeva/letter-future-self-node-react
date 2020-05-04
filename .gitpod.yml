@@ -1,4 +1,4 @@
 tasks:
-  - init: npm install
-image:
-  file: .gitpod.Dockerfile
+    - name: index
+      init: npm install
+      command: npm start
