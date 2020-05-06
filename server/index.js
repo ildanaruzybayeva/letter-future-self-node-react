@@ -13,26 +13,26 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 app.get('/', (req, res) => {
-    res.send('Welcome to my api');
+    res.json('Welcome to my api');
 })
-
 
 const oauth2Client = new OAuth2(
     process.env.clientId, // ClientID
     process.env.clientSecret, // Client Secret
     "https://developers.google.com/oauthplayground" // Redirect URL
-);
+)
 
 oauth2Client.setCredentials({
     refresh_token: process.env.refreshToken,
 });
+
 const accessToken = oauth2Client.getAccessToken()
 
 
-app.post('/api', (req, res) => {
+app.post('/api', async (req, res) => {
     const data = req.body;
 
-    const smtpTransport = nodemailer.createTransport({
+    const smtpTransport = await nodemailer.createTransport({
         service: "gmail",
         auth: {
             type: "OAuth2",
@@ -46,12 +46,10 @@ app.post('/api', (req, res) => {
 
     const mailOptions = {
         from: "ildana.ruzybayeva@gmail.com",
-        to: `${data.email}`,
-        subject: "hello ily",
+        to: `ildvnv@gmail.com`,
+        subject: "testing",
         generateTextFromHTML: true,
-        html: `
-        <p>${data.email}</p>
-        <p>${data.message}</p>`
+        html: `<p>${data.message}</p>`
     };
 
     smtpTransport.sendMail(mailOptions, (error, response) => {
@@ -59,6 +57,7 @@ app.post('/api', (req, res) => {
         smtpTransport.close();
     });
 })
+
 
 const PORT = 5000
 app.listen(PORT, () => console.log(`Server started on ${PORT}`));
