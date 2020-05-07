@@ -1,0 +1,49 @@
+.form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 0.5em;
+}
+.email-input {
+  text-align: left;
+  width: 55%;
+  height: 5vh;
+  border: 1px solid #c9e6ff;
+  margin-bottom: 0.5em;
+  font-size: xx-large;
+}
+
+.date-input {
+    text-align: left;
+    width: 55%;
+    height: 5vh;
+    border: 1px solid #c9e6ff;
+    margin-bottom: 0.5em;
+    font-size: xx-large;
+  }
+
+.text-input {
+    text-align: center;
+    width: 55%;
+    height: 60vh;
+    border: 1px solid #c9e6ff;
+    margin-bottom: 0.5em;
+    font-size: large;
+}
+
+.Form button {
+    height: 5vh;   
+    background: rgb(151, 151, 218);
+    width: 55.5%;
+    border: 0;
+    text-transform: uppercase;
+}
+
+.Form form button:hover,
+.Form form button:focus {
+  background: rgba(241, 177, 37, 0.671);
+  color: black;
+  outline: 0;
+  transition: background-color 0.5s ease-out;
+}

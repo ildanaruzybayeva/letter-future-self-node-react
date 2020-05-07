@@ -49,7 +49,8 @@ app.post('/api', async (req, res) => {
         to: `${data.email}`,
         subject: "testing",
         generateTextFromHTML: true,
-        html: `<p>${data.message}</p>`
+        html: `<p>${data.message}</p>
+               <p>sent from letterTMFS</p>`
     };
 
     smtpTransport.sendMail(mailOptions, (error, response) => {
