@@ -46,7 +46,7 @@ app.post('/api', async (req, res) => {
 
     const mailOptions = {
         from: "ildana.ruzybayeva@gmail.com",
-        to: `ildvnv@gmail.com`,
+        to: `${data.email}`,
         subject: "testing",
         generateTextFromHTML: true,
         html: `<p>${data.message}</p>`

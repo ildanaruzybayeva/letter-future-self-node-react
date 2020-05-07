@@ -1,29 +1,61 @@
 import React, { useState } from 'react';
+import axios from 'axios'
+import Status from './Status'
 
 const Form = props => {
-    const [message, setMessage] = useState('');
+    const BACKEND_ROOT = 'http://localhost:5000/'
+    const [text, setText] = useState('');
+    const [status, setStatus] = useState('pending')
+    const [loading, setLoading] = useState()
+    const [recipient, setRecipient] = useState('')
 
-    const handleInputChange = event => {
-        setMessage(event.target.value)
-    };
+    function handleChange(e) {
+        setText(e.target.value)
+    }
 
-    const handleInputSubmit = event => {
-        event.preventDefault();
-        props.addMsg(message);
-        setMessage('');
-    };
+    function handleRecipient(e) {
+        setRecipient(e.target.value)
+    }
 
+    const data = {
+        message: text,
+        email: recipient
+    }
+
+    const sendMessage = (e) => {
+        e.preventDefault();
+        setLoading('loading')
+        axios.post(`${BACKEND_ROOT}api`, data)
+            .then(() => {
+                setText('')
+                setRecipient('')
+                setLoading()
+                setStatus(`Message sent to ${recipient}`)
+            })
+            .catch(() => {
+                setStatus('Message failed to sent')
+            })
+    }
     return (
-        <form onSubmit={handleInputSubmit}>
-            <label>Message</label>
-            <input
-                type="text"
-                name="name"
-                value={message}
-                onChange={handleInputChange}
-            />
-            <button>Add a new user</button>
-        </form>
+        <div className="App">
+            <form onSubmit={sendMessage}>
+                <input
+                    type="email"
+                    value={recipient}
+                    placeholder="recipient"
+                    onChange={handleRecipient}
+                    required />
+                <input
+                    type="text"
+                    value={text}
+                    placeholder="your message"
+                    onChange={handleChange}
+                    required />
+                <button type="submit">Send</button>
+            </form>
+            {loading}
+            <Status status={status} />
+        </div>
     );
 }
 
