@@ -5,13 +5,9 @@ import './App.css'
 function App() {
   return (
     <div className="App">
-      <div className="left-container">
+      <div className="App-form">
         <Form />
       </div>
-      <div className="right-container">
-
-      </div>
-
     </div>
   )
 }

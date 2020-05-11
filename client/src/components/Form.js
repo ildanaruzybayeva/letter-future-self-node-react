@@ -3,12 +3,15 @@ import axios from 'axios'
 import Status from './Status'
 import './Form.css'
 
+const todayDate = new Date().toISOString().slice(0, 10);
+
 const Form = props => {
     const BACKEND_ROOT = 'http://localhost:5000/'
     const [text, setText] = useState('');
     const [status, setStatus] = useState('waiting for the message')
     const [loading, setLoading] = useState('Send')
     const [recipient, setRecipient] = useState('')
+    const [date, setDate] = useState(todayDate)
 
     function handleChange(e) {
         setText(e.target.value)
@@ -16,6 +19,10 @@ const Form = props => {
 
     function handleRecipient(e) {
         setRecipient(e.target.value)
+    }
+
+    function handleDate(e) {
+        setDate(e.target.value)
     }
 
     const data = {
@@ -37,6 +44,7 @@ const Form = props => {
                 setStatus('Message failed to sent')
             })
     }
+
     return (
         <div className="Form">
             <form onSubmit={sendMessage}>
@@ -51,6 +59,8 @@ const Form = props => {
                     className="date-input"
                     type="date"
                     placeholder="choose date"
+                    value={date}
+                    onChange={handleDate}
                 />
                 <textarea
                     className="text-input"

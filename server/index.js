@@ -47,16 +47,24 @@ app.post('/api', async (req, res) => {
     const mailOptions = {
         from: "ildana.ruzybayeva@gmail.com",
         to: `${data.email}`,
-        subject: "testing",
+        text: `${data.date}`,
+        subject: "letterTMFS",
         generateTextFromHTML: true,
         html: `<p>${data.message}</p>
                <p>sent from letterTMFS</p>`
     };
 
-    smtpTransport.sendMail(mailOptions, (error, response) => {
-        error ? res.send(error) : res.send(response);
-        smtpTransport.close();
-    });
+    const prepareMessage = () => {
+        smtpTransport.sendMail(mailOptions, (error, response) => {
+            error ? res.send(error) : res.send(response);
+            smtpTransport.close();
+        })
+    }
+
+    const prepareDate = () => Date.parse(data.date) - Date.now()
+    setTimeout(prepareMessage, prepareDate)
+    clearTimeout(prepareDate);
+
 })
 
 
