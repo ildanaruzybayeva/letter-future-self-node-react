@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
+const schedule = require('node-schedule')
 const OAuth2 = google.auth.OAuth2;
 require('dotenv').config();
 
@@ -47,11 +48,10 @@ app.post('/api', async (req, res) => {
     const mailOptions = {
         from: "ildana.ruzybayeva@gmail.com",
         to: `${data.email}`,
-        text: `${data.date}`,
         subject: "letterTMFS",
         generateTextFromHTML: true,
         html: `<p>${data.message}</p>
-               <p>sent from letterTMFS</p>`
+                <p>sent from letterTMFS</p>`
     };
 
     const prepareMessage = () => {
@@ -61,10 +61,15 @@ app.post('/api', async (req, res) => {
         })
     }
 
-    const prepareDate = () => Date.parse(data.date) - Date.now()
-    setTimeout(prepareMessage, prepareDate)
-    clearTimeout(prepareDate);
+    //const prepareDate = () => Date.parse(mailOptions.text) - Date.now()
 
+    const date = new Date(2020, 4, 12, 11, 22, 0);
+    console.log(Date.now())
+
+    schedule.scheduleJob(date, function () {
+        console.log(`sent at ${date}`)
+        prepareMessage()
+    });
 })
 
 
