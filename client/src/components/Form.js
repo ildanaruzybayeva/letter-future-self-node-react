@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios'
-import Status from './Status'
 import './Form.css'
 
 const todayDate = new Date().toISOString().slice(0, 10);
 
 const Form = props => {
-    const BACKEND_ROOT = 'http://localhost:5000/'
+    const BACKEND_ROOT = 'https://5ylxm.sse.codesandbox.io/'
     const [text, setText] = useState('');
-    const [status, setStatus] = useState('waiting for the message')
     const [loading, setLoading] = useState('Send')
     const [recipient, setRecipient] = useState('')
     const [time, setTime] = useState(todayDate)
@@ -34,15 +32,15 @@ const Form = props => {
     const sendMessage = (e) => {
         e.preventDefault();
         setLoading('Sent')
-        setText('')
+        setText(`Message sent to ${recipient}`)
         setRecipient('')
-        setStatus(`Message sent to ${recipient}`)
+        setLoading('Send')
         axios.post(`${BACKEND_ROOT}api`, data)
             .then(() => {
                 console.log('its empty here')
             })
             .catch(() => {
-                setStatus('Message failed to sent')
+                setText('Message failed to sent')
             })
     }
 
@@ -72,7 +70,6 @@ const Form = props => {
                     required />
                 <button type="submit">{loading}</button>
             </form>
-            <Status status={status} />
         </div>
     );
 }

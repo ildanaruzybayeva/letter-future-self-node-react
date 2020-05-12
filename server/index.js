@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 app.get('/', (req, res) => {
-    res.json('Welcome to my api');
+    res.json('Welcome to letterTMFS');
 })
 
 const oauth2Client = new OAuth2(
@@ -54,7 +54,7 @@ app.post('/api', async (req, res) => {
         <p>sent from letterTMFS on ${data.date}</p>`
     };
 
-    const prepareMessage = () => {
+    const sendMessage = () => {
         smtpTransport.sendMail(mailOptions, (error, response) => {
             error ? res.send(error) : res.send(response);
             smtpTransport.close();
@@ -62,18 +62,18 @@ app.post('/api', async (req, res) => {
     }
 
     const usersDate = data.date //date in string '2020-05-12'
-    const year = usersDate.slice(0, 4) //add +1 to send next year
+    const year = usersDate.slice(0, 4) + 1//add +1 to send next year
     const month = usersDate.slice(5, 7) - 1 //January starts form 0
     const day = usersDate.slice(8, 10)
-    const date = new Date(year, month, day, 12, 12, 0);
+    const dateOfMessage = new Date(year, month, day, 12, 45, 0);
 
-    schedule.scheduleJob(date, function () {
-        console.log(`sent at ${date}`)
-        prepareMessage()
+    schedule.scheduleJob(dateOfMessage, function () {
+        sendMessage()
+        console.log(`sent at ${dateOfMessage}`)
     });
-    console.log(`done, message: ${data.message}`)
-})
 
+    console.log(`accepted, message: ${data.message}`)
+})
 
 const PORT = 5000
 app.listen(PORT, () => console.log(`Server started on ${PORT}`));
