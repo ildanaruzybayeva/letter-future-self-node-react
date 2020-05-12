@@ -11,7 +11,7 @@ const Form = props => {
     const [status, setStatus] = useState('waiting for the message')
     const [loading, setLoading] = useState('Send')
     const [recipient, setRecipient] = useState('')
-    const [date, setDate] = useState(todayDate)
+    const [time, setTime] = useState(todayDate)
 
     function handleChange(e) {
         setText(e.target.value)
@@ -22,23 +22,24 @@ const Form = props => {
     }
 
     function handleDate(e) {
-        setDate(e.target.value)
+        setTime(e.target.value)
     }
 
     const data = {
         message: text,
-        email: recipient
+        email: recipient,
+        date: time
     }
 
     const sendMessage = (e) => {
         e.preventDefault();
-        setLoading('Sending...')
+        setLoading('Sent')
+        setText('')
+        setRecipient('')
+        setStatus(`Message sent to ${recipient}`)
         axios.post(`${BACKEND_ROOT}api`, data)
             .then(() => {
-                setText('')
-                setRecipient('')
-                setLoading('Sent')
-                setStatus(`Message sent to ${recipient}`)
+                console.log('its empty here')
             })
             .catch(() => {
                 setStatus('Message failed to sent')
@@ -59,7 +60,7 @@ const Form = props => {
                     className="date-input"
                     type="date"
                     placeholder="choose date"
-                    value={date}
+                    value={time}
                     onChange={handleDate}
                 />
                 <textarea

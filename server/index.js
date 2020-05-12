@@ -51,7 +51,7 @@ app.post('/api', async (req, res) => {
         subject: "letterTMFS",
         generateTextFromHTML: true,
         html: `<p>${data.message}</p>
-                <p>sent from letterTMFS</p>`
+        <p>sent from letterTMFS on ${data.date}</p>`
     };
 
     const prepareMessage = () => {
@@ -61,15 +61,17 @@ app.post('/api', async (req, res) => {
         })
     }
 
-    //const prepareDate = () => Date.parse(mailOptions.text) - Date.now()
-
-    const date = new Date(2020, 4, 12, 11, 22, 0);
-    console.log(Date.now())
+    const usersDate = data.date //date in string '2020-05-12'
+    const year = usersDate.slice(0, 4) //add +1 to send next year
+    const month = usersDate.slice(5, 7) - 1 //January starts form 0
+    const day = usersDate.slice(8, 10)
+    const date = new Date(year, month, day, 12, 12, 0);
 
     schedule.scheduleJob(date, function () {
         console.log(`sent at ${date}`)
         prepareMessage()
     });
+    console.log(`done, message: ${data.message}`)
 })
 
 
